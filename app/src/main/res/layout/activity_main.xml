@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_program"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title=" " />
+
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="5dp"
+            android:text="Mezclando Colores"
+            android:textSize="27sp" />
+
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingTop="50dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#fcfcfc"
+            android:gravity="center"
+            android:id="@+id/ll">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color 1:"
+                android:textSize="22dp"/>
+
+            <TextView
+                android:id="@+id/colorname1"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Azúl"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_marginLeft="16dp"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_1"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:onClick="showDialogColor1"
+                app:cardBackgroundColor="@android:color/holo_blue_dark"
+                app:cardCornerRadius="8dp">
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:paddingTop="30dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#fcfcfc"
+            android:gravity="center"
+            android:id="@+id/ll2">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Color 2:"
+                android:textSize="22dp"/>
+
+            <TextView
+                android:id="@+id/colorname2"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:text="Azúl"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_marginLeft="16dp"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_2"
+                android:layout_width="50dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:onClick="showDialogColor2"
+                app:cardBackgroundColor="@android:color/holo_blue_dark"
+                app:cardCornerRadius="8dp">
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#fcfcfc"
+            android:gravity="center_horizontal"
+            android:paddingTop="48dp"
+            android:id="@+id/ll3">
+
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resultado:    "
+                android:textSize="28dp"/>
+
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/card_3"
+                android:layout_marginTop="8dp"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                app:cardBackgroundColor="@android:color/holo_blue_dark"
+                app:cardCornerRadius="8dp">
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
