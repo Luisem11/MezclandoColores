@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.edu.udea.mezclandocolores.DB.DbHelper;
 import com.edu.udea.mezclandocolores.DB.StatusContract;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
     }
@@ -304,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int code = 0;
+                int code;
                 if (card1_border.getCardBackgroundColor().getDefaultColor() == Color.BLACK) {
                     code = 1;
                 } else if (card2_border.getCardBackgroundColor().getDefaultColor() == Color.BLACK) {
@@ -319,31 +321,40 @@ public class MainActivity extends AppCompatActivity {
                     code = 6;
                 } else {
                     Toast.makeText(view.getContext(), "Debes seleccionar un color!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 DbHelper dbHelper = new DbHelper(view.getContext());
                 SQLiteDatabase db = new DbHelper(view.getContext()).getReadableDatabase();
                 int code2 = pref.getInt("color1", 0);
-                Cursor cursor = db.query(StatusContract.TABLE_SECONDARY,
-                        null,
-                        StatusContract.Column_Secondary_Color.COLOR1 + " = ? AND " +
-                                StatusContract.Column_Secondary_Color.COLOR2 + " = ?",
-                        new String[]{"" + code2, "" + code},
-                        null,
-                        null,
-                        null);
-                if (cursor.moveToFirst()){
-                    int result = cursor.getInt(cursor.getColumnIndex(StatusContract.Column_Secondary_Color.RESULT));
+
+                if(code2 == code){
                     edit.putInt("color2", code);
-                    edit.putInt("result", result);
+                    edit.putInt("result", code);
                     edit.commit();
+                    refresh();
+                    dialog.dismiss();
+                }else{
+                    Cursor cursor = db.query(StatusContract.TABLE_SECONDARY,
+                            null,
+                            StatusContract.Column_Secondary_Color.COLOR1 + " = ? AND " +
+                                    StatusContract.Column_Secondary_Color.COLOR2 + " = ?",
+                            new String[]{"" + code2, "" + code},
+                            null,
+                            null,
+                            null);
 
+                    if (cursor.moveToFirst()){
+                        int result = cursor.getInt(cursor.getColumnIndex(StatusContract.Column_Secondary_Color.RESULT));
+                        edit.putInt("color2", code);
+                        edit.putInt("result", result);
+                        edit.commit();
+                        refresh();
+                        dialog.dismiss();
+                    }else{
+                        Toast.makeText(view.getContext(), "Mezcla indefinida. Selecciona otro color.", Toast.LENGTH_SHORT).show();
+                        code = 0;
+                    }
                 }
-
-                refresh();
-
-                dialog.dismiss();
-
-
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -354,7 +365,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
     }
