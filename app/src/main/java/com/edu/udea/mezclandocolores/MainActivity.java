@@ -2,6 +2,7 @@ package com.edu.udea.mezclandocolores;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,9 +11,13 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,11 +33,20 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences.Editor edit;
     TextView name_color1, name_color2, resultTextV;
     CardView card1, card2, card3;
+    Toolbar toolbar;
+    LinearLayout resultLL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Attaching the layout to the toolbar object
+        toolbar = (Toolbar) findViewById(R.id.toolbar_program);
+        // Setting toolbar as the ActionBar with setSupportActionBar() call
+        setSupportActionBar(toolbar);
+
+        resultLL = findViewById(R.id.ll3);
         name_color1 = findViewById(R.id.colorname1);
         card1 = findViewById(R.id.card_1);
         name_color2 = findViewById(R.id.colorname2);
@@ -138,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     edit.putInt("color1", code);
+                    edit.putInt("color2", 0);
+                    edit.putInt("result", 0);
                     edit.commit();
                     refresh();
 
@@ -162,6 +178,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showDialogColor2(View view) {
+        int code = pref.getInt("color1", 0);
+        if (code == 0){
+            Toast.makeText(view.getContext(), "Debes seleccionar el Color 1 primero.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_color2);
         CardView card_primary1 = dialog.findViewById(R.id.card_primary1);
@@ -380,7 +403,6 @@ public class MainActivity extends AppCompatActivity {
             card1.setCardBackgroundColor(Color.GRAY);
             name_color2.setText("");
             card2.setCardBackgroundColor(Color.GRAY);
-            return;
         }else {
 
             cursor = db.query(StatusContract.TABLE_PRIMARY,
@@ -401,7 +423,6 @@ public class MainActivity extends AppCompatActivity {
         if (code2 == 0) {
             name_color2.setText("");
             card2.setCardBackgroundColor(Color.GRAY);
-            return;
         }else {
 
             cursor = db.query(StatusContract.TABLE_PRIMARY,
@@ -422,7 +443,8 @@ public class MainActivity extends AppCompatActivity {
         if (result == 0) {
             resultTextV.setText("Resultado:    ");
             card3.setCardBackgroundColor(Color.GRAY);
-            return;
+            resultLL.setVisibility(View.GONE);
+
         }else{
             cursor = db.query(StatusContract.TABLE_PRIMARY,
                     null,
@@ -433,6 +455,7 @@ public class MainActivity extends AppCompatActivity {
                     null);
 
             cursor.moveToFirst();
+            resultLL.setVisibility(View.VISIBLE);
             resultTextV.setText("Resultado: " +cursor.getString(cursor.getColumnIndex(StatusContract.Column_Primary_Color.NAME)));
             card3.setCardBackgroundColor(Color.parseColor("#" +
                     cursor.getString(cursor.getColumnIndex(StatusContract.Column_Primary_Color.CODE))));
@@ -440,5 +463,43 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void onClickAgain(View view) {
+
+        pref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        edit = pref.edit();
+        edit.putInt("color1", 0);
+        edit.putInt("color2", 0);
+        edit.putInt("result", 0);
+        edit.commit();
+        refresh();
+
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.exit) {
+            Intent salida=new Intent( Intent.ACTION_MAIN); //Llamando a la activity principal
+            finish(); // La cerramos.
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
